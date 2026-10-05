@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R1 — Dominez votre pool de hockey LNH toute la saison</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #c8102e;
+            --accent: #00a3e0;
+            --ice: #f4f7f9;
+            --text: #1a1a1a;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --error: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--ice);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            padding: 20px 0;
+            border-bottom: 2px solid #e1e8ed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #001f3d 100%);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 18px 36px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: #a00d25;
+        }
+
+        .cta-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Problème */
+        .problem {
+            padding: 60px 0;
+            background: #fff;
+            text-align: center;
+        }
+
+        .problem h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .problem p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* Produit */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .feature-example {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 3px solid var(--secondary);
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Comment ça marche */
+        .how-it-works {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+        }
+
+        /* Prix */
+        .pricing {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .price-card {
+            background: var(--white);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .price-amount {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .price-founder {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .faq-item {
+            max-width: 800px;
+            margin: 0 auto 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-item h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Modal & Formulaire */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .form-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* Confirmation Panel */
+        #success-panel {
+            display: none;
+            text-align: center;
+        }
+
+        .reservation-code {
+            display: block;
+            background: var(--ice);
+            border: 2px dashed var(--primary);
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 900;
+            padding: 15px;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+            .modal-content { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">R1</a>
+                <div class="nav-links">
+                    <a href="#produit">Le produit</a>
+                    <a href="#prix">Prix</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Ton repêchage est fini.<br>C'est maintenant que la saison se gagne.</h1>
+            <p>Le pool de hockey, ce n'est pas qu'un soir en septembre. C'est 82 matchs de gestion. R1 est ton conseiller personnel pour dominer ta ligue chaque semaine de la saison 2026-2027.</p>
+            <button class="cta-button btn-open-res">Je réserve ma saison — 10 $</button>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <h2>Marre de voir tes rivaux ramasser les meilleurs joueurs avant toi ?</h2>
+            <p>« Entre les blessures surprises, les changements de trios et le ballotage que tu n'as pas le temps de surveiller, ta saison peut basculer en une semaine. R1 fait le travail de recherche pour toi. »</p>
+        </div>
+    </section>
+
+    <section id="produit" class="features">
+        <div class="container">
+            <h2 class="section-title">Tout pour gagner ton pool</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Ballotage (Waiver Wire)</h3>
+                    <p>Une analyse hebdomadaire des joueurs disponibles. On vous dit qui ajouter selon vos besoins immédiats.</p>
+                    <div class="feature-example">
+                        Exemple : « Connor Bedard est blessé ? Le jeune espoir qui prend sa place sur l'avantage numérique est disponible dans 80% des pools. Ramassez-le maintenant. »
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h3>Gestion des blessures</h3>
+                    <p>Ne perdez plus de points avec un joueur inactif. Nous suivons les durées d'absence et les remplaçants directs.</p>
+                    <div class="feature-example">
+                        Exemple : « Nick Suzuki ratera 2 semaines. C'est le moment d'activer Kirby Dach qui passe du 2e au 1er centre. »
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h3>Combinaisons de trios</h3>
+                    <p>Les entraîneurs changent tout. Nous surveillons les entraînements matinaux pour savoir qui joue avec qui, en temps réel.</p>
+                    <div class="feature-example">
+                        Exemple : « Joshua Roy vient d'être promu sur le premier trio avec Cole Caufield. Son potentiel de points triple ce soir. »
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h3>Classements sur mesure</h3>
+                    <p>Un classement adapté à VOTRE pool. Que vous comptiez les buts, les passes, les tirs ou les mises en échec.</p>
+                    <div class="feature-example">
+                        Exemple : « Dans ton format "Points seulement", ton meilleur défenseur est actuellement Makar. Dans ton format "Multi-catégories", c'est Gudas. »
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Comment ça marche</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>Tu réserves ta saison en profitant de l'offre de lancement.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>Tu nous indiques les règles spécifiques de ton pool.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>Tu reçois tes alertes de ballotage et tes classements personnalisés chaque semaine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="prix" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Prêt à soulever la coupe ?</h2>
+            <div class="price-card">
+                <h3>Accès Saison Complète</h3>
+                <div class="price-amount">10 $</div>
+                <p>Paiement unique. Aucune tacite reconduction.</p>
+                <p style="margin-top:15px;">Couvre toute la saison 2026-2027, séries incluses.</p>
+                <button class="cta-button btn-open-res" style="margin-top:20px; width: 100%;">Réserver ma place</button>
+                <p class="price-founder">⚠️ Seulement 10 places disponibles pour les membres fondateurs. Votre avis forgera l'évolution du service.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Foire aux questions</h2>
+            <div class="faq-item">
+                <h4>Et si je n'aime pas le service ?</h4>
+                <p>Nous sommes convaincus que R1 va t'aider à gagner. Si après 7 jours tu n'es pas satisfait, on te rembourse sans poser de questions.</p>
+            </div>
+            <div class="faq-item">
+                <h4>C'est pour quel type de pool ?</h4>
+                <p>Tous les types. Que ce soit un pool "box" simple, un pool à la ronde ou un pool dynastie avec catégories complexes.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Quand est-ce que ça commence ?</h4>
+                <p>Le service est actif dès ton inscription. Puisque la saison est commencée, tu reçois ton premier rapport d'analyse sous 24h.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Pourquoi seulement 10 $ ?</h4>
+                <p>C'est un prix de lancement exclusif. Nous voulons bâtir une communauté de 10 poolers passionnés pour valider nos algorithmes avant le grand déploiement.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p><strong>R1</strong> — La science du pool de hockey.</p>
+            <p>Fait avec passion au Québec ❄️</p>
+            <p>Contact : essaim.agents@gmail.com</p>
+        </div>
+    </footer>
+
+    <!-- Overlay de Réservation -->
+    <div class="modal-overlay" id="modal-res">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            
+            <div id="reservation-form-container">
+                <h2 class="form-title">Réserver ma place — 10 $</h2>
+                <form id="res-form">
+                    <div class="form-group">
+                        <label for="fullname">Nom complet</label>
+                        <input type="text" id="fullname" class="form-control" placeholder="Ex: Jean Tremblay" required>
+                        <span class="error-msg" id="error-name">Ton nom est requis (min. 2 caractères).</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Courriel</label>
+                        <input type="email" id="email" class="form-control" placeholder="Ex: jean@exemple.com" required>
+                        <span class="error-msg" id="error-email">Entre un courriel valide.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Format de ton pool</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="pool-format" value="Points" required> Points
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="pool-format" value="Catégories"> Catégories
+                            </label>
+                        </div>
+                        <span class="error-msg" id="error-format">Choisis un format.</span>
+                    </div>
+                    <button type="submit" id="submit-res" class="cta-button" style="width: 100%; margin-top: 10px;" disabled>Confirmer ma réservation</button>
+                </form>
+            </div>
+
+            <div id="success-panel">
+                <div class="success-icon">✓</div>
+                <h2 class="form-title">Réservation confirmée !</h2>
+                <p style="margin-bottom: 10px;"><strong id="display-name"></strong>, ta place est bloquée.</p>
+                <p style="font-size: 0.9rem; color: #666;">Récapitulatif : Réservation R1 — Saison 2026-2027 — 10 $ CAD</p>
+                
+                <span class="reservation-code" id="display-code">R1-XXXXXX</span>
+                
+                <p style="font-size: 0.95rem; margin-bottom: 20px;">Clique ci-dessous pour payer tes 10 $ et confirmer ta place pour la saison.</p>
+                
+                <a href="https://buy.stripe.com/9B6dR8fNf4J9fP50Xhc7u00" class="cta-button" style="width: 100%; display: block; text-align: center; text-decoration: none; margin-bottom: 12px; box-sizing: border-box;">Payer 10 $ — confirmer ma saison</a>
+                
+                <button id="btn-mailto" class="cta-button" style="width: 100%; background: var(--primary);">Envoyer ma réservation par courriel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('modal-res');
+            const openBtns = document.querySelectorAll('.btn-open-res');
+            const closeBtn = document.getElementById('close-modal');
+            const form = document.getElementById('res-form');
+            const formContainer = document.getElementById('reservation-form-container');
+            const successPanel = document.getElementById('success-panel');
+            const submitBtn = document.getElementById('submit-res');
+
+            const nameInput = document.getElementById('fullname');
+            const emailInput = document.getElementById('email');
+            const formatInputs = document.getElementsByName('pool-format');
+
+            // Ouvrir/Fermer Modal
+            openBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Validation en temps réel
+            const validate = () => {
+                const isNameValid = nameInput.value.trim().length >= 2;
+                const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+                let isFormatValid = false;
+                for (const radio of formatInputs) {
+                    if (radio.checked) {
+                        isFormatValid = true;
+                        break;
+                    }
+                }
+
+                // Affichage erreurs
+                document.getElementById('error-name').style.display = (nameInput.value.length > 0 && !isNameValid) ? 'block' : 'none';
+                document.getElementById('error-email').style.display = (emailInput.value.length > 0 && !isEmailValid) ? 'block' : 'none';
+
+                submitBtn.disabled = !(isNameValid && isEmailValid && isFormatValid);
+            };
+
+            [nameInput, emailInput].forEach(el => el.addEventListener('input', validate));
+            formatInputs.forEach(el => el.addEventListener('change', validate));
+
+            // Soumission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = nameInput.value;
+                const email = emailInput.value;
+                let format = "";
+                for (const radio of formatInputs) {
+                    if (radio.checked) format = radio.value;
+                }
+
+                // Génération code
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let codeSuffix = '';
+                for (let i = 0; i < 6; i++) {
+                    codeSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                const code = 'R1-' + codeSuffix;
+
+                // Affichage succès
+                document.getElementById('display-name').textContent = name;
+                document.getElementById('display-code').textContent = code;
+                
+                formContainer.style.display = 'none';
+                successPanel.style.display = 'block';
+
+                // Setup bouton mailto
+                const mailBtn = document.getElementById('btn-mailto');
+                const subject = encodeURIComponent(`Réservation R1 [${code}]`);
+                const body = encodeURIComponent(
+                    `Bonjour l'équipe R1,\n\n` +
+                    `Je souhaite confirmer ma réservation de prévente.\n\n` +
+                    `Nom : ${name}\n` +
+                    `Courriel : ${email}\n` +
+                    `Format de pool : ${format}\n` +
+                    `Code de réservation : ${code}\n\n` +
+                    `Merci !`
+                );
+                mailBtn.addEventListener('click', () => {
+                    window.location.href = `mailto:essaim.agents@gmail.com?subject=${subject}&body=${body}`;
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>>
