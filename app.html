@@ -98,6 +98,64 @@
 </head>
 <body>
 
+    <!-- Accès membres : courriel + code R1 liés -->
+    <div id="r1-gate" style="position:fixed;inset:0;background:#f7f8fa;z-index:9999;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:32px 16px;">
+        <div style="background:#fff;border:1px solid #e2e5ea;border-radius:10px;max-width:420px;width:100%;padding:24px;box-shadow:0 4px 18px rgba(0,0,0,0.06);">
+            <h2 style="margin-top:0;">Accès membres R1</h2>
+            <p style="font-size:0.95rem;color:#444;">Cette app est réservée aux membres qui ont payé leur saison (10 $). Entre le courriel utilisé lors de ta réservation et ton code personnel.</p>
+            <label style="display:block;font-size:0.9rem;margin:12px 0 4px;">Courriel</label>
+            <input type="email" id="gate-email" placeholder="Ex: jean@exemple.com" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;">
+            <label style="display:block;font-size:0.9rem;margin:12px 0 4px;">Code R1</label>
+            <input type="text" id="gate-code" placeholder="R1-XXXXXX" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;text-transform:uppercase;">
+            <p id="gate-error" style="display:none;color:#b00020;font-size:0.9rem;margin:10px 0 0;">Ce courriel et ce code ne correspondent pas. Vérifie et réessaie.</p>
+            <button id="gate-btn" style="width:100%;margin-top:16px;padding:12px;background:#1f3864;color:#fff;border:none;border-radius:6px;font-size:1rem;cursor:pointer;">Ouvrir l'app</button>
+            <p style="font-size:0.9rem;color:#444;margin-top:16px;">Pas encore membre ? <a href="index.html">Réserve ta saison ici</a></p>
+        </div>
+    </div>
+    <script>
+        // Même fonction que la page de réservation : le code est lié au courriel
+        function codeForEmail(rawEmail) {
+            const norm = (rawEmail || '').trim().toLowerCase();
+            const s = 'R1-ESSAIM-2026|' + norm;
+            let h1 = 0x811c9dc5, h2 = 0x27d4eb2f;
+            for (let i = 0; i < s.length; i++) {
+                h1 = Math.imul(h1 ^ s.charCodeAt(i), 0x01000193) >>> 0;
+                h2 = Math.imul(h2 ^ s.charCodeAt(i), 0x85ebca6b) >>> 0;
+            }
+            const alphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+            let x = (h1 ^ h2) >>> 0;
+            let out = '';
+            for (let i = 0; i < 6; i++) {
+                out += alphabet.charAt(x % alphabet.length);
+                x = (Math.imul(x, 1103515245) + 12345) >>> 0;
+            }
+            return 'R1-' + out;
+        }
+        (function () {
+            const gate = document.getElementById('r1-gate');
+            const savedEmail = localStorage.getItem('r1_access_email');
+            const savedCode = localStorage.getItem('r1_access_code');
+            if (savedEmail && savedCode && codeForEmail(savedEmail) === savedCode.toUpperCase()) {
+                gate.style.display = 'none';
+                return;
+            }
+            gate.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('gate-btn').addEventListener('click', () => {
+                const email = document.getElementById('gate-email').value;
+                const code = document.getElementById('gate-code').value.trim().toUpperCase();
+                if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && codeForEmail(email) === code) {
+                    localStorage.setItem('r1_access_email', email.trim().toLowerCase());
+                    localStorage.setItem('r1_access_code', code);
+                    gate.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                } else {
+                    document.getElementById('gate-error').style.display = 'block';
+                }
+            });
+        })();
+    </script>
+
     <header>
         <a href="index.html" class="back-link">← Accueil</a>
         <h1>R1</h1>

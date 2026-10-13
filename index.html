@@ -551,23 +551,23 @@
                         </div>
                         <span class="error-msg" id="error-format">Choisis un format.</span>
                     </div>
-                    <button type="submit" id="submit-res" class="cta-button" style="width: 100%; margin-top: 10px;" disabled>Confirmer ma réservation</button>
+                    <button type="submit" id="submit-res" class="cta-button" style="width: 100%; margin-top: 10px;" disabled>Obtenir mon code personnel</button>
                 </form>
             </div>
 
             <div id="success-panel">
                 <div class="success-icon">✓</div>
-                <h2 class="form-title">Réservation confirmée !</h2>
-                <p style="margin-bottom: 10px;"><strong id="display-name"></strong>, ta place est bloquée.</p>
+                <h2 class="form-title">Voici ton code personnel</h2>
+                <p style="margin-bottom: 10px;"><strong id="display-name"></strong>, ton code est lié à ton courriel. Garde-le : avec ton courriel, il te servira à ouvrir l'app R1.</p>
                 <p style="font-size: 0.9rem; color: #666;">Récapitulatif : Réservation R1 — Saison 2026-2027 — 10 $ CAD</p>
-                
+
                 <span class="reservation-code" id="display-code">R1-XXXXXX</span>
-                
-                <p style="font-size: 0.95rem; margin-bottom: 20px;">Clique ci-dessous pour payer tes 10 $ et confirmer ta place pour la saison.</p>
-                
-                <a href="https://buy.stripe.com/9B6dR8fNf4J9fP50Xhc7u00" class="cta-button" style="width: 100%; display: block; text-align: center; text-decoration: none; margin-bottom: 12px; box-sizing: border-box;">Payer 10 $ — confirmer ma saison</a>
-                
-                <button id="btn-mailto" class="cta-button" style="width: 100%; background: var(--primary);">Envoyer ma réservation par courriel</button>
+
+                <p style="font-size: 0.95rem; margin-bottom: 20px;">Deux étapes pour confirmer ta place : <strong>1)</strong> envoie-nous ta demande par courriel ; <strong>2)</strong> paie tes 10 $ — ton code suivra automatiquement ton paiement. Ta place est confirmée quand le paiement est reçu.</p>
+
+                <button id="btn-mailto" class="cta-button" style="width: 100%; background: var(--primary); margin-bottom: 12px;">1. Envoyer ma demande par courriel</button>
+
+                <a id="btn-pay" href="https://buy.stripe.com/9B6dR8fNf4J9fP50Xhc7u00" class="cta-button" style="width: 100%; display: block; text-align: center; text-decoration: none; box-sizing: border-box;">2. Payer 10 $ — finaliser ma réservation</a>
             </div>
         </div>
     </div>
@@ -585,6 +585,25 @@
             const nameInput = document.getElementById('fullname');
             const emailInput = document.getElementById('email');
             const formatInputs = document.getElementsByName('pool-format');
+
+            // Génère le code R1 lié au courriel (même fonction dans l'app)
+            function codeForEmail(rawEmail) {
+                const norm = (rawEmail || '').trim().toLowerCase();
+                const s = 'R1-ESSAIM-2026|' + norm;
+                let h1 = 0x811c9dc5, h2 = 0x27d4eb2f;
+                for (let i = 0; i < s.length; i++) {
+                    h1 = Math.imul(h1 ^ s.charCodeAt(i), 0x01000193) >>> 0;
+                    h2 = Math.imul(h2 ^ s.charCodeAt(i), 0x85ebca6b) >>> 0;
+                }
+                const alphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+                let x = (h1 ^ h2) >>> 0;
+                let out = '';
+                for (let i = 0; i < 6; i++) {
+                    out += alphabet.charAt(x % alphabet.length);
+                    x = (Math.imul(x, 1103515245) + 12345) >>> 0;
+                }
+                return 'R1-' + out;
+            }
 
             // Ouvrir/Fermer Modal
             openBtns.forEach(btn => {
@@ -639,17 +658,15 @@
                     if (radio.checked) format = radio.value;
                 }
 
-                // Génération code
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let codeSuffix = '';
-                for (let i = 0; i < 6; i++) {
-                    codeSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                const code = 'R1-' + codeSuffix;
+                // Code personnel lié au courriel (le même courriel redonne le même code)
+                const code = codeForEmail(email);
 
-                // Affichage succès
+                // Affichage du panneau des étapes
                 document.getElementById('display-name').textContent = name;
                 document.getElementById('display-code').textContent = code;
+
+                // Le code et le courriel suivent le paiement (référence Stripe)
+                document.getElementById('btn-pay').href = 'https://buy.stripe.com/9B6dR8fNf4J9fP50Xhc7u00?client_reference_id=' + encodeURIComponent(code) + '&prefilled_email=' + encodeURIComponent(email);
                 
                 formContainer.style.display = 'none';
                 successPanel.style.display = 'block';
@@ -659,7 +676,7 @@
                 const subject = encodeURIComponent(`Réservation R1 [${code}]`);
                 const body = encodeURIComponent(
                     `Bonjour l'équipe R1,\n\n` +
-                    `Je souhaite confirmer ma réservation de prévente.\n\n` +
+                    `Voici ma demande de réservation de prévente.\n\n` +
                     `Nom : ${name}\n` +
                     `Courriel : ${email}\n` +
                     `Format de pool : ${format}\n` +
@@ -667,7 +684,7 @@
                     `Merci !`
                 );
                 mailBtn.addEventListener('click', () => {
-                    window.location.href = `mailto:essaim.agents@gmail.com?subject=${subject}&body=${body}`;
+                    window.location.href = `mailto:contact@essaim-agents.com?subject=${subject}&body=${body}`;
                 });
             });
         });
